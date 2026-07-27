@@ -751,7 +751,7 @@ exports.init = init;
 
                     // show the remember me checkbox
                     if (isRememberEnabled) {
-                        document.getElementById("staticrypt-remember-label").classList.remove("hidden");
+                        // remember disabled
                     }
                 }
             };
@@ -783,7 +783,7 @@ exports.init = init;
                 e.preventDefault();
 
                 const password = document.getElementById("staticrypt-password").value,
-                    isRememberChecked = document.getElementById("staticrypt-remember").checked;
+                    isRememberChecked = false;
 
                 const { isSuccessful } = await staticrypt.handleDecryptionOfPage(password, isRememberChecked);
 
