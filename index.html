@@ -115,11 +115,6 @@
                             />
                         </div>
 
-                        <label id="staticrypt-remember-label" class="staticrypt-remember hidden">
-                            <input id="staticrypt-remember" type="checkbox" name="remember" />
-                            Lembrar neste dispositivo
-                        </label>
-
                         <input type="submit" class="staticrypt-decrypt-button" value="Entrar" />
                     </form>
                     <div class="sc-footer">© 2026 Jéssica Mariano</div>
@@ -793,7 +788,17 @@ exports.init = init;
                 const { isSuccessful } = await staticrypt.handleDecryptionOfPage(password, isRememberChecked);
 
                 if (!isSuccessful) {
-                    alert(templateError);
+                    let errEl = document.getElementById("sc-error");
+                    if (!errEl) {
+                        errEl = document.createElement("div");
+                        errEl.id = "sc-error";
+                        errEl.style.cssText = "font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.05em;color:#c65a52;margin-top:14px;padding:10px 14px;background:rgba(198,90,82,.08);border:1px solid rgba(198,90,82,.25);border-radius:6px";
+                        document.getElementById("staticrypt-form").appendChild(errEl);
+                    }
+                    errEl.textContent = "Senha incorreta. Tente novamente.";
+                    errEl.style.display = "block";
+                    document.getElementById("staticrypt-password").value = "";
+                    document.getElementById("staticrypt-password").focus();
                 }
             });
         </script>
