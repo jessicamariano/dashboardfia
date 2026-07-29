@@ -391,7 +391,9 @@ const hasContent=v=>v&&v.trim()!==''&&v.trim()!=='—';
 function statusBadge(s){
   const m={'Não iniciada':'b-gray','Recebimento de materiais':'b-orange','Layout + Desenvolvimento':'b-blue',
     'Aprovação do cliente':'b-amber','Ajustes':'b-amber','Recebimento do script':'b-purple',
-    'Implementação do script':'b-purple','Publicada':'b-green','Finalizada':'b-green'};
+    'Implementação do script':'b-purple','Publicada':'b-green','Finalizada':'b-green',
+    'Enviada ao cliente para ajustes':'b-amber','Enviada ao cliente para a aprovação':'b-amber',
+    'Cliente pediu novo ajuste':'b-orange'};
   return `<span class="badge ${m[s]||'b-gray'}">${s||'Não iniciada'}</span>`;
 }
 
@@ -417,8 +419,10 @@ function renderDashboard(data){
 
   const statusColors={'Não iniciada':'#55606c','Recebimento de materiais':'#c47a4e','Layout + Desenvolvimento':'#2f80d0',
     'Aprovação do cliente':'#cba14e','Ajustes':'#cba14e','Recebimento do script':'#8a6fb0','Implementação do script':'#8a6fb0',
-    'Publicada':'#3fa66b','Finalizada':'#3fa66b'};
-  const allStatuses=['Não iniciada','Recebimento de materiais','Layout + Desenvolvimento','Aprovação do cliente','Ajustes','Recebimento do script','Implementação do script','Publicada','Finalizada'];
+    'Publicada':'#3fa66b','Finalizada':'#3fa66b',
+    'Enviada ao cliente para ajustes':'#cba14e','Enviada ao cliente para a aprovação':'#cba14e',
+    'Cliente pediu novo ajuste':'#c47a4e'};
+  const allStatuses=['Não iniciada','Recebimento de materiais','Layout + Desenvolvimento','Aprovação do cliente','Ajustes','Enviada ao cliente para ajustes','Enviada ao cliente para a aprovação','Cliente pediu novo ajuste','Recebimento do script','Implementação do script','Publicada','Finalizada'];
   let sc=allStatuses.map(s=>data.filter(d=>d.status===s).length);
   const emptyCount=data.filter(d=>!d.status||d.status.trim()==='').length;
   if(emptyCount>0)sc[0]+=emptyCount;
@@ -430,7 +434,7 @@ function renderDashboard(data){
 
   /* ---- Resumo visual · 3 gráficos HTML (sempre visíveis) ---- */
   const barMax=Math.max(total,1);
-  const shortStatus=s=>({'Recebimento de materiais':'Receb. materiais','Layout + Desenvolvimento':'Layout + Dev','Aprovação do cliente':'Aprovação cliente','Recebimento do script':'Receb. script','Implementação do script':'Implem. script'}[s]||s);
+  const shortStatus=s=>({'Recebimento de materiais':'Receb. materiais','Layout + Desenvolvimento':'Layout + Dev','Aprovação do cliente':'Aprovação cliente','Recebimento do script':'Receb. script','Implementação do script':'Implem. script','Enviada ao cliente para ajustes':'Env. p/ ajustes','Enviada ao cliente para a aprovação':'Env. p/ aprovação','Cliente pediu novo ajuste':'Novo ajuste'}[s]||s);
   const pipelineRows=allStatuses.map((s,i)=>({s,c:sc[i]})).filter(x=>x.c>0).map((x,i)=>{
     const w=Math.round(x.c/barMax*100),done=(x.s==='Publicada'||x.s==='Finalizada');
     return `<div class="hb" style="--i:${i}"><span class="hb-l" title="${esc(x.s)}">${esc(shortStatus(x.s))}</span><div class="hb-t"><div class="hb-f${done?' ok':''}" style="width:${w}%"></div></div><span class="hb-v">${x.c}</span></div>`;
